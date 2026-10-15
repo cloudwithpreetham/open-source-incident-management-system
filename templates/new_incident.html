@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Declare New Incident &bull; IncidentFlow{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-header bg-white py-3 border-bottom">
+                <h4 class="mb-0 fw-bold text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i> Declare Production Incident</h4>
+                <p class="text-muted small mb-0">Fill in the details to trigger team notification and log for triaging.</p>
+            </div>
+            <div class="card-body p-4">
+                <form action="{{ url_for('new_incident_view') }}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Incident Title <span class="text-danger">*</span></label>
+                        <input type="text" name="title" class="form-control" placeholder="e.g. Redis Cluster High Memory / Pod Eviction" required>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Affected Service / Component <span class="text-danger">*</span></label>
+                            <input type="text" name="service" class="form-control" placeholder="e.g. auth-service-k8s, postgres-primary" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Severity Level <span class="text-danger">*</span></label>
+                            <select name="severity" class="form-select" required>
+                                <option value="P1 - Critical">P1 - Critical (Complete Outage / Customer Impact)</option>
+                                <option value="P2 - High">P2 - High (Degraded Performance / Redundancy Lost)</option>
+                                <option value="P3 - Medium" selected>P3 - Medium (Non-critical bug / Warning thresholds)</option>
+                                <option value="P4 - Low">P4 - Low (Cosmetic / Minor internal issue)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Assign Immediate Responder</label>
+                        <select name="assigned_to" class="form-select">
+                            <option value="">-- Leave Unassigned (Broadcast to On-Call Pool) --</option>
+                            {% for u in users %}
+                                <option value="{{ u.email }}">{{ u.name }} ({{ u.role }}) &lt;{{ u.email }}&gt;</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Incident Description & Evidence <span class="text-danger">*</span></label>
+                        <textarea name="description" rows="5" class="form-control" placeholder="Describe symptoms, error codes, logs, dashboards, impact..." required></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('dashboard_view') }}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-danger btn-lg px-4">
+                            <i class="bi bi-broadcast me-1"></i> Declare Incident & Notify
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

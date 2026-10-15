@@ -1,0 +1,24 @@
+services:
+  incident-portal:
+    build: .
+    container_name: incident-management-portal
+    ports:
+      - "5000:5000"
+    environment:
+      - SECRET_KEY=prod-incident-portal-key-2026
+      - ENABLE_SMTP=false
+      - SMTP_HOST=mailpit
+      - SMTP_PORT=1025
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    depends_on:
+      - mailpit
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: incident-smtp-server
+    ports:
+      - "8025:8025" # Web UI for emails
+      - "1025:1025" # SMTP port
+    restart: unless-stopped

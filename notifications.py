@@ -2,11 +2,11 @@
 SMTP Email Notification Module for Incident Management System.
 Supports real SMTP dispatch as well as safe local logging for demonstration/dev mode.
 """
-import smtplib
-import os
 import logging
-from email.mime.text import MIMEText
+import os
+import smtplib
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 logger = logging.getLogger("incident_notifications")
 logging.basicConfig(level=logging.INFO)

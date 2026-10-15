@@ -1,8 +1,10 @@
 """
 Seed script to populate initial users and realistic infrastructure/application incidents.
 """
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
+
 import models
+
 
 def seed():
     models.init_db()
@@ -129,8 +131,8 @@ def seed():
     for inc in incidents_data:
         cursor.execute("""
             INSERT INTO incidents (
-                title, description, service, severity, status, 
-                reporter_name, reporter_email, assigned_to, resolution_notes, 
+                title, description, service, severity, status,
+                reporter_name, reporter_email, assigned_to, resolution_notes,
                 created_at, updated_at, resolved_at
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (

@@ -4,7 +4,9 @@ Flask Application providing REST APIs and a Responsive Web Dashboard.
 """
 import os
 from datetime import datetime, timezone
-from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
+
+from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
+
 import models
 import notifications
 
@@ -122,7 +124,7 @@ def api_get_incident(incident_id):
     if not row:
         conn.close()
         return jsonify({"error": "Incident not found"}), 404
-    
+
     logs = conn.execute("SELECT * FROM incident_logs WHERE incident_id = ? ORDER BY id DESC", (incident_id,)).fetchall()
     conn.close()
 
@@ -151,7 +153,7 @@ def api_assign_incident(incident_id):
     conn.close()
 
     models.log_incident_activity(incident_id, "Assigned", actor, f"Assigned to {assigned_to}")
-    
+
     inc_dict = dict(inc)
     inc_dict["assigned_to"] = assigned_to
     notifications.send_incident_notification(assigned_to, f"Assignment Update: #{incident_id} [{inc_dict['severity']}]", inc_dict, "Assigned")
@@ -175,7 +177,7 @@ def api_resolve_incident(incident_id):
 
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     conn.execute("""
-        UPDATE incidents 
+        UPDATE incidents
         SET status = 'Resolved', resolution_notes = ?, updated_at = ?, resolved_at = ?
         WHERE id = ?
     """, (resolution_notes, now, now, incident_id))
@@ -225,9 +227,9 @@ def dashboard_view():
 
     recent_incidents = conn.execute("SELECT * FROM incidents ORDER BY id DESC LIMIT 5").fetchall()
     recent_logs = conn.execute("""
-        SELECT l.*, i.title as incident_title 
-        FROM incident_logs l 
-        JOIN incidents i ON l.incident_id = i.id 
+        SELECT l.*, i.title as incident_title
+        FROM incident_logs l
+        JOIN incidents i ON l.incident_id = i.id
         ORDER BY l.id DESC LIMIT 6
     """).fetchall()
     users = conn.execute("SELECT * FROM users ORDER BY name ASC").fetchall()
@@ -345,9 +347,9 @@ def update_status_form(incident_id):
 
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     resolved_at = now if new_status == "Resolved" else inc["resolved_at"]
-    
+
     conn.execute("""
-        UPDATE incidents 
+        UPDATE incidents
         SET status = ?, updated_at = ?, resolved_at = ?
         WHERE id = ?
     """, (new_status, now, resolved_at, incident_id))
@@ -385,8 +387,8 @@ def resolve_form(incident_id):
     conn = models.get_db_connection()
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     conn.execute("""
-        UPDATE incidents 
-        SET status = 'Resolved', resolution_notes = ?, updated_at = ?, resolved_at = ? 
+        UPDATE incidents
+        SET status = 'Resolved', resolution_notes = ?, updated_at = ?, resolved_at = ?
         WHERE id = ?
     """, (resolution_notes, now, now, incident_id))
     conn.commit()

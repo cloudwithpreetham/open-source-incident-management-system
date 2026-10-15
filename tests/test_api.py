@@ -1,8 +1,8 @@
-import pytest
+import json
 import os
 import sys
-import json
-import tempfile
+
+import pytest
 
 proj_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if proj_dir not in sys.path:
@@ -13,8 +13,9 @@ for mod_name in ['models', 'notifications', 'app', 'seed_data']:
     sys.modules.pop(mod_name, None)
 
 os.environ["INCIDENT_DB_PATH"] = "test_incidents.db"
-import models
 import app as flask_app
+import models
+
 
 @pytest.fixture
 def client():
@@ -22,7 +23,7 @@ def client():
     if os.path.exists("test_incidents.db"):
         os.remove("test_incidents.db")
     models.init_db()
-    
+
     flask_app.app.config["TESTING"] = True
     with flask_app.app.test_client() as client:
         yield client

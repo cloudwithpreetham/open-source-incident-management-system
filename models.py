@@ -2,8 +2,8 @@
 Database models and helpers for Open-Source Incident Management System.
 Uses SQLite for zero-configuration, robust local and containerized persistence.
 """
-import sqlite3
 import os
+import sqlite3
 from datetime import datetime, timezone
 
 DATABASE_NAME = os.getenv("INCIDENT_DB_PATH", "incidents.db")

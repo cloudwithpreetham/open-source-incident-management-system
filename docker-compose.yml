@@ -22,3 +22,4 @@ services:
       - "8025:8025" # Web UI for emails
       - "1025:1025" # SMTP port
     restart: unless-stopped
+

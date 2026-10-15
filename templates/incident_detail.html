@@ -1,242 +1,326 @@
-{% extends "base.html" %}
-
-{% block title %}Incident #{{ incident.id }} - {{ incident.title }}{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Incident #{{ incident.id }} - {{ incident.title }}{%
+endblock %} {% block content %}
 <div class="mb-3">
-    <a href="{{ url_for('incidents_view') }}" class="text-decoration-none text-muted small">
-        <i class="bi bi-arrow-left"></i> Back to all incidents
-    </a>
+  <a href="{{ url_for('incidents_view') }}" class="text-decoration-none text-muted small">
+    <i class="bi bi-arrow-left"></i> Back to all incidents
+  </a>
 </div>
 
 <!-- Header -->
 <div class="card border-0 shadow-sm rounded-3 mb-4">
-    <div class="card-body p-4">
-        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
-            <div>
-                <div class="d-flex align-items-center gap-2 mb-2">
-                    <span class="fs-4 fw-bold text-dark">#{{ incident.id }}</span>
-                    {% if 'P1' in incident.severity %}
-                        <span class="badge bg-danger fs-6">P1 Critical</span>
-                    {% elif 'P2' in incident.severity %}
-                        <span class="badge bg-warning text-dark fs-6">P2 High</span>
-                    {% elif 'P3' in incident.severity %}
-                        <span class="badge bg-info text-dark fs-6">P3 Medium</span>
-                    {% else %}
-                        <span class="badge bg-secondary fs-6">P4 Low</span>
-                    {% endif %}
-
-                    {% if incident.status == 'Open' %}
-                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle fs-6 px-3 py-1">Open</span>
-                    {% elif incident.status == 'Investigating' %}
-                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle fs-6 px-3 py-1">Investigating</span>
-                    {% elif incident.status == 'Mitigated' %}
-                        <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle fs-6 px-3 py-1">Mitigated</span>
-                    {% else %}
-                        <span class="badge bg-success-subtle text-success border border-success-subtle fs-6 px-3 py-1">Resolved</span>
-                    {% endif %}
-                </div>
-                <h3 class="fw-bold mb-2">{{ incident.title }}</h3>
-                <div class="text-muted small">
-                    <span class="me-3"><i class="bi bi-hdd-stack"></i> <strong>Service:</strong> {{ incident.service }}</span>
-                    <span class="me-3"><i class="bi bi-clock"></i> <strong>Reported:</strong> {{ incident.created_at }}</span>
-                    <span><i class="bi bi-person"></i> <strong>Reporter:</strong> {{ incident.reporter_name }} ({{ incident.reporter_email }})</span>
-                </div>
-            </div>
-
-            <!-- Quick Action Buttons -->
-            <div class="d-flex gap-2">
-                {% if incident.status != 'Resolved' %}
-                    <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#resolveModal">
-                        <i class="bi bi-check-circle-fill me-1"></i> Resolve Incident
-                    </button>
-                {% endif %}
-                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#assignModal">
-                    <i class="bi bi-person-plus-fill me-1"></i> Reassign
-                </button>
-                <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#statusModal">
-                    <i class="bi bi-arrow-repeat me-1"></i> Change Status
-                </button>
-            </div>
+  <div class="card-body p-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="fs-4 fw-bold text-dark">#{{ incident.id }}</span>
+          {% if 'P1' in incident.severity %}
+          <span class="badge bg-danger fs-6">P1 Critical</span>
+          {% elif 'P2' in incident.severity %}
+          <span class="badge bg-warning text-dark fs-6">P2 High</span>
+          {% elif 'P3' in incident.severity %}
+          <span class="badge bg-info text-dark fs-6">P3 Medium</span>
+          {% else %}
+          <span class="badge bg-secondary fs-6">P4 Low</span>
+          {% endif %} {% if incident.status == 'Open' %}
+          <span
+            class="badge bg-danger-subtle text-danger border border-danger-subtle fs-6 px-3 py-1"
+            >Open</span
+          >
+          {% elif incident.status == 'Investigating' %}
+          <span
+            class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle fs-6 px-3 py-1"
+            >Investigating</span
+          >
+          {% elif incident.status == 'Mitigated' %}
+          <span
+            class="badge bg-info-subtle text-info-emphasis border border-info-subtle fs-6 px-3 py-1"
+            >Mitigated</span
+          >
+          {% else %}
+          <span
+            class="badge bg-success-subtle text-success border border-success-subtle fs-6 px-3 py-1"
+            >Resolved</span
+          >
+          {% endif %}
         </div>
+        <h3 class="fw-bold mb-2">{{ incident.title }}</h3>
+        <div class="text-muted small">
+          <span class="me-3"
+            ><i class="bi bi-hdd-stack"></i> <strong>Service:</strong> {{ incident.service }}</span
+          >
+          <span class="me-3"
+            ><i class="bi bi-clock"></i> <strong>Reported:</strong> {{ incident.created_at }}</span
+          >
+          <span
+            ><i class="bi bi-person"></i> <strong>Reporter:</strong> {{ incident.reporter_name }}
+            ({{ incident.reporter_email }})</span
+          >
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="d-flex gap-2">
+        {% if incident.status != 'Resolved' %}
+        <button
+          class="btn btn-outline-success"
+          data-bs-toggle="modal"
+          data-bs-target="#resolveModal"
+        >
+          <i class="bi bi-check-circle-fill me-1"></i> Resolve Incident
+        </button>
+        {% endif %}
+        <button
+          class="btn btn-outline-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#assignModal"
+        >
+          <i class="bi bi-person-plus-fill me-1"></i> Reassign
+        </button>
+        <button
+          class="btn btn-outline-secondary"
+          data-bs-toggle="modal"
+          data-bs-target="#statusModal"
+        >
+          <i class="bi bi-arrow-repeat me-1"></i> Change Status
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="row g-4">
-    <!-- Left Column: Details & Resolution -->
-    <div class="col-lg-8">
-        <!-- Incident Description -->
-        <div class="card border-0 shadow-sm rounded-3 mb-4">
-            <div class="card-header bg-white py-3 border-bottom">
-                <h5 class="mb-0 fw-bold"><i class="bi bi-card-text text-primary me-2"></i> Problem Statement & Description</h5>
-            </div>
-            <div class="card-body p-4">
-                <p class="fs-6 text-dark" style="white-space: pre-line;">{{ incident.description }}</p>
-            </div>
-        </div>
-
-        <!-- Resolution Notes (if resolved) -->
-        {% if incident.resolution_notes %}
-        <div class="card border-0 shadow-sm rounded-3 border-start border-success border-4 mb-4 bg-white">
-            <div class="card-header bg-white py-3 border-bottom">
-                <h5 class="mb-0 fw-bold text-success"><i class="bi bi-patch-check-fill me-2"></i> Resolution & Post-Mortem Notes</h5>
-            </div>
-            <div class="card-body p-4">
-                <p class="mb-2 text-dark" style="white-space: pre-line;">{{ incident.resolution_notes }}</p>
-                <div class="small text-muted">
-                    <i class="bi bi-clock-history"></i> Resolved At: <strong>{{ incident.resolved_at }}</strong>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Timeline / Audit Logs -->
-        <div class="card border-0 shadow-sm rounded-3">
-            <div class="card-header bg-white py-3 border-bottom">
-                <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history text-secondary me-2"></i> Timeline & Activity Log</h5>
-            </div>
-            <div class="card-body p-4">
-                <ul class="list-unstyled timeline-list mb-0">
-                    {% for l in logs %}
-                    <li class="mb-4 pb-2 border-bottom border-light position-relative ps-4">
-                        <div class="position-absolute top-0 start-0 translate-middle-y mt-2">
-                            <span class="badge rounded-circle bg-primary p-1"><i class="bi bi-dot"></i></span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="fw-bold text-dark">{{ l.action }}</span>
-                            <span class="small text-muted">{{ l.timestamp }}</span>
-                        </div>
-                        <div class="small text-muted mb-1">{{ l.notes }}</div>
-                        <div class="small text-secondary"><i class="bi bi-person"></i> Actor: <strong>{{ l.actor }}</strong></div>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+  <!-- Left Column: Details & Resolution -->
+  <div class="col-lg-8">
+    <!-- Incident Description -->
+    <div class="card border-0 shadow-sm rounded-3 mb-4">
+      <div class="card-header bg-white py-3 border-bottom">
+        <h5 class="mb-0 fw-bold">
+          <i class="bi bi-card-text text-primary me-2"></i> Problem Statement & Description
+        </h5>
+      </div>
+      <div class="card-body p-4">
+        <p class="fs-6 text-dark" style="white-space: pre-line">{{ incident.description }}</p>
+      </div>
     </div>
 
-    <!-- Right Column: Meta info & On-call info -->
-    <div class="col-lg-4">
-        <div class="card border-0 shadow-sm rounded-3 mb-4">
-            <div class="card-header bg-white py-3 border-bottom">
-                <h5 class="mb-0 fw-bold"><i class="bi bi-info-circle text-info me-2"></i> Metadata</h5>
-            </div>
-            <div class="card-body p-3">
-                <ul class="list-group list-group-flush small">
-                    <li class="list-group-item d-flex justify-content-between px-0">
-                        <span class="text-muted">Incident ID:</span>
-                        <span class="fw-bold">#{{ incident.id }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between px-0">
-                        <span class="text-muted">Assigned Responder:</span>
-                        <span class="fw-bold">{{ incident.assigned_to or 'Unassigned' }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between px-0">
-                        <span class="text-muted">Last Updated:</span>
-                        <span>{{ incident.updated_at }}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between px-0">
-                        <span class="text-muted">Notification Dispatch:</span>
-                        <span class="badge bg-success-subtle text-success">Enabled (Simulated/SMTP)</span>
-                    </li>
-                </ul>
-            </div>
+    <!-- Resolution Notes (if resolved) -->
+    {% if incident.resolution_notes %}
+    <div
+      class="card border-0 shadow-sm rounded-3 border-start border-success border-4 mb-4 bg-white"
+    >
+      <div class="card-header bg-white py-3 border-bottom">
+        <h5 class="mb-0 fw-bold text-success">
+          <i class="bi bi-patch-check-fill me-2"></i> Resolution & Post-Mortem Notes
+        </h5>
+      </div>
+      <div class="card-body p-4">
+        <p class="mb-2 text-dark" style="white-space: pre-line">{{ incident.resolution_notes }}</p>
+        <div class="small text-muted">
+          <i class="bi bi-clock-history"></i> Resolved At:
+          <strong>{{ incident.resolved_at }}</strong>
         </div>
-
-        <div class="card border-0 shadow-sm rounded-3 bg-light">
-            <div class="card-body p-4">
-                <h6 class="fw-bold"><i class="bi bi-terminal me-2"></i> REST API Quick Call</h6>
-                <p class="small text-muted mb-2">Query this incident programmatically via JSON API:</p>
-                <code class="d-block p-2 bg-dark text-warning rounded small mb-2">
-                    curl http://localhost:5000/api/v1/incidents/{{ incident.id }}
-                </code>
-            </div>
-        </div>
+      </div>
     </div>
+    {% endif %}
+
+    <!-- Timeline / Audit Logs -->
+    <div class="card border-0 shadow-sm rounded-3">
+      <div class="card-header bg-white py-3 border-bottom">
+        <h5 class="mb-0 fw-bold">
+          <i class="bi bi-clock-history text-secondary me-2"></i> Timeline & Activity Log
+        </h5>
+      </div>
+      <div class="card-body p-4">
+        <ul class="list-unstyled timeline-list mb-0">
+          {% for l in logs %}
+          <li class="mb-4 pb-2 border-bottom border-light position-relative ps-4">
+            <div class="position-absolute top-0 start-0 translate-middle-y mt-2">
+              <span class="badge rounded-circle bg-primary p-1"><i class="bi bi-dot"></i></span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="fw-bold text-dark">{{ l.action }}</span>
+              <span class="small text-muted">{{ l.timestamp }}</span>
+            </div>
+            <div class="small text-muted mb-1">{{ l.notes }}</div>
+            <div class="small text-secondary">
+              <i class="bi bi-person"></i> Actor: <strong>{{ l.actor }}</strong>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Column: Meta info & On-call info -->
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm rounded-3 mb-4">
+      <div class="card-header bg-white py-3 border-bottom">
+        <h5 class="mb-0 fw-bold"><i class="bi bi-info-circle text-info me-2"></i> Metadata</h5>
+      </div>
+      <div class="card-body p-3">
+        <ul class="list-group list-group-flush small">
+          <li class="list-group-item d-flex justify-content-between px-0">
+            <span class="text-muted">Incident ID:</span>
+            <span class="fw-bold">#{{ incident.id }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between px-0">
+            <span class="text-muted">Assigned Responder:</span>
+            <span class="fw-bold">{{ incident.assigned_to or 'Unassigned' }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between px-0">
+            <span class="text-muted">Last Updated:</span>
+            <span>{{ incident.updated_at }}</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between px-0">
+            <span class="text-muted">Notification Dispatch:</span>
+            <span class="badge bg-success-subtle text-success">Enabled (Simulated/SMTP)</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-3 bg-light">
+      <div class="card-body p-4">
+        <h6 class="fw-bold"><i class="bi bi-terminal me-2"></i> REST API Quick Call</h6>
+        <p class="small text-muted mb-2">Query this incident programmatically via JSON API:</p>
+        <code class="d-block p-2 bg-dark text-warning rounded small mb-2">
+          curl http://localhost:5000/api/v1/incidents/{{ incident.id }}
+        </code>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Modal: Resolve Incident -->
 <div class="modal fade" id="resolveModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ url_for('resolve_form', incident_id=incident.id) }}" method="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold text-success"><i class="bi bi-check2-circle"></i> Resolve Incident #{{ incident.id }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Resolution Summary & Root Cause Analysis (RCA)</label>
-                        <textarea name="resolution_notes" rows="4" class="form-control" placeholder="Describe root cause and remediation steps taken..." required></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success">Confirm Resolution</button>
-                </div>
-            </form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="{{ url_for('resolve_form', incident_id=incident.id) }}" method="POST">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold text-success">
+            <i class="bi bi-check2-circle"></i> Resolve Incident #{{ incident.id }}
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-semibold"
+              >Resolution Summary & Root Cause Analysis (RCA)</label
+            >
+            <textarea
+              name="resolution_notes"
+              rows="4"
+              class="form-control"
+              placeholder="Describe root cause and remediation steps taken..."
+              required
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success">Confirm Resolution</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
 <!-- Modal: Assign Incident -->
 <div class="modal fade" id="assignModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ url_for('assign_form', incident_id=incident.id) }}" method="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold"><i class="bi bi-person-plus"></i> Assign Incident #{{ incident.id }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Select Responder</label>
-                        <select name="assigned_to" class="form-select" required>
-                            {% for u in users %}
-                                <option value="{{ u.email }}" {% if incident.assigned_to == u.email %}selected{% endif %}>{{ u.name }} ({{ u.role }}) &lt;{{ u.email }}&gt;</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update Assignee</button>
-                </div>
-            </form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="{{ url_for('assign_form', incident_id=incident.id) }}" method="POST">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">
+            <i class="bi bi-person-plus"></i> Assign Incident #{{ incident.id }}
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Select Responder</label>
+            <select name="assigned_to" class="form-select" required>
+              {% for u in users %}
+              <option
+                value="{{ u.email }}"
+                {%
+                if
+                incident.assigned_to=""
+                ="u.email"
+                %}selected{%
+                endif
+                %}
+              >
+                {{ u.name }} ({{ u.role }}) &lt;{{ u.email }}&gt;
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Assignee</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
 <!-- Modal: Change Status -->
 <div class="modal fade" id="statusModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ url_for('update_status_form', incident_id=incident.id) }}" method="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold"><i class="bi bi-arrow-repeat"></i> Update Incident Status</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">New Status</label>
-                        <select name="status" class="form-select">
-                            <option value="Open" {% if incident.status == 'Open' %}selected{% endif %}>Open</option>
-                            <option value="Investigating" {% if incident.status == 'Investigating' %}selected{% endif %}>Investigating</option>
-                            <option value="Mitigated" {% if incident.status == 'Mitigated' %}selected{% endif %}>Mitigated</option>
-                            <option value="Resolved" {% if incident.status == 'Resolved' %}selected{% endif %}>Resolved</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Status Notes (Optional)</label>
-                        <input type="text" name="status_note" class="form-control" placeholder="Brief note on status progress...">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Status</button>
-                </div>
-            </form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="{{ url_for('update_status_form', incident_id=incident.id) }}" method="POST">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">
+            <i class="bi bi-arrow-repeat"></i> Update Incident Status
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">New Status</label>
+            <select name="status" class="form-select">
+              <option value="Open" {% if incident.status="" ="Open" %}selected{% endif %}>
+                Open
+              </option>
+              <option
+                value="Investigating"
+                {%
+                if
+                incident.status=""
+                ="Investigating"
+                %}selected{%
+                endif
+                %}
+              >
+                Investigating
+              </option>
+              <option value="Mitigated" {% if incident.status="" ="Mitigated" %}selected{% endif %}>
+                Mitigated
+              </option>
+              <option value="Resolved" {% if incident.status="" ="Resolved" %}selected{% endif %}>
+                Resolved
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Status Notes (Optional)</label>
+            <input
+              type="text"
+              name="status_note"
+              class="form-control"
+              placeholder="Brief note on status progress..."
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Status</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 {% endblock %}

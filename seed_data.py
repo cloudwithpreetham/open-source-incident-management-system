@@ -6,6 +6,25 @@ from datetime import datetime, timedelta, timezone
 import models
 
 
+def seed_users():
+    """Populates users table with initial team members."""
+    conn = models.get_db_connection()
+    cursor = conn.cursor()
+    team_members = [
+        ("Alice Chen", "alice.chen@ops.example.com", "Admin"),
+        ("David Miller", "david.m@ops.example.com", "DevOps Engineer"),
+        ("Siddharth Patel", "siddharth.p@ops.example.com", "SRE"),
+        ("Elena Rostova", "elena.r@ops.example.com", "DevOps Engineer"),
+        ("Security Bot", "secops-alert@internal.local", "Viewer")
+    ]
+    for name, email, role in team_members:
+        cursor.execute(
+            "INSERT OR IGNORE INTO users (name, email, role, created_at) VALUES (?, ?, ?, ?)",
+            (name, email, role, datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"))
+        )
+    conn.commit()
+    conn.close()
+
 def seed():
     models.init_db()
     conn = models.get_db_connection()
@@ -15,21 +34,12 @@ def seed():
     cursor.execute("DELETE FROM incident_logs;")
     cursor.execute("DELETE FROM incidents;")
     cursor.execute("DELETE FROM users;")
+    conn.commit()
+    conn.close()
 
-    # Seed Team Members
-    team_members = [
-        ("Alice Chen", "alice.chen@ops.example.com", "Admin"),
-        ("David Miller", "david.m@ops.example.com", "DevOps Engineer"),
-        ("Siddharth Patel", "siddharth.p@ops.example.com", "SRE"),
-        ("Elena Rostova", "elena.r@ops.example.com", "DevOps Engineer"),
-        ("Security Bot", "secops-alert@internal.local", "Viewer")
-    ]
-
-    for name, email, role in team_members:
-        cursor.execute(
-            "INSERT INTO users (name, email, role, created_at) VALUES (?, ?, ?, ?)",
-            (name, email, role, datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"))
-        )
+    seed_users()
+    conn = models.get_db_connection()
+    cursor = conn.cursor()
 
     # Seed Sample Incidents
     now = datetime.now(timezone.utc)

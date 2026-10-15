@@ -6,11 +6,13 @@ import os
 import sqlite3
 from datetime import datetime, timezone
 
-DATABASE_NAME = os.getenv("INCIDENT_DB_PATH", "incidents.db")
+
+def get_db_path():
+    return os.getenv("INCIDENT_DB_PATH", "incidents.db")
 
 def get_db_connection():
     """Create and return a database connection with row factory enabled."""
-    conn = sqlite3.connect(DATABASE_NAME)
+    conn = sqlite3.connect(get_db_path())
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     return conn

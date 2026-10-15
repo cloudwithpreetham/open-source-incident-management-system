@@ -83,23 +83,14 @@
                 class="form-select form-select-sm bg-dark text-white border-secondary"
                 onchange="this.form.submit()"
               >
-                <option
-                  value="DevOps Engineer"
-                  {%
-                  if
-                  current_role=""
-                  ="DevOps Engineer"
-                  %}selected{%
-                  endif
-                  %}
-                >
+                <option value="DevOps Engineer" {% if current_role == 'DevOps Engineer' %}selected{% endif %}>
                   DevOps Engineer
                 </option>
-                <option value="Admin" {% if current_role="" ="Admin" %}selected{% endif %}>
+                <option value="Admin" {% if current_role == 'Admin' %}selected{% endif %}>
                   Admin / Lead
                 </option>
-                <option value="SRE" {% if current_role="" ="SRE" %}selected{% endif %}>SRE</option>
-                <option value="Viewer" {% if current_role="" ="Viewer" %}selected{% endif %}>
+                <option value="SRE" {% if current_role == 'SRE' %}selected{% endif %}>SRE</option>
+                <option value="Viewer" {% if current_role == 'Viewer' %}selected{% endif %}>
                   Viewer (Read Only)
                 </option>
               </select>

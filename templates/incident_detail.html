@@ -244,13 +244,7 @@ endblock %} {% block content %}
               {% for u in users %}
               <option
                 value="{{ u.email }}"
-                {%
-                if
-                incident.assigned_to=""
-                ="u.email"
-                %}selected{%
-                endif
-                %}
+                {% if incident.assigned_to == u.email %}selected{% endif %}
               >
                 {{ u.name }} ({{ u.role }}) &lt;{{ u.email }}&gt;
               </option>
@@ -282,25 +276,16 @@ endblock %} {% block content %}
           <div class="mb-3">
             <label class="form-label fw-semibold">New Status</label>
             <select name="status" class="form-select">
-              <option value="Open" {% if incident.status="" ="Open" %}selected{% endif %}>
+              <option value="Open" {% if incident.status == 'Open' %}selected{% endif %}>
                 Open
               </option>
-              <option
-                value="Investigating"
-                {%
-                if
-                incident.status=""
-                ="Investigating"
-                %}selected{%
-                endif
-                %}
-              >
+              <option value="Investigating" {% if incident.status == 'Investigating' %}selected{% endif %}>
                 Investigating
               </option>
-              <option value="Mitigated" {% if incident.status="" ="Mitigated" %}selected{% endif %}>
+              <option value="Mitigated" {% if incident.status == 'Mitigated' %}selected{% endif %}>
                 Mitigated
               </option>
-              <option value="Resolved" {% if incident.status="" ="Resolved" %}selected{% endif %}>
+              <option value="Resolved" {% if incident.status == 'Resolved' %}selected{% endif %}>
                 Resolved
               </option>
             </select>

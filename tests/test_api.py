@@ -92,3 +92,31 @@ def test_metrics_endpoint(client):
     res = client.get("/api/v1/metrics")
     assert res.status_code == 200
     assert b"incident_total" in res.data
+
+def test_web_views(client):
+    # Dashboard view
+    res = client.get("/")
+    assert res.status_code == 200
+    assert b"IncidentFlow" in res.data
+
+    # Incidents list view
+    res = client.get("/incidents")
+    assert res.status_code == 200
+
+    # New incident form view
+    res = client.get("/incidents/new")
+    assert res.status_code == 200
+
+    # Create an incident and test detail view rendering
+    post_res = client.post("/api/v1/incidents", json={
+        "title": "Web UI Render Test Incident",
+        "description": "Checking template compilation",
+        "service": "frontend-ui",
+        "severity": "P3 - Medium"
+    })
+    inc_id = json.loads(post_res.data)["incident_id"]
+
+    detail_res = client.get(f"/incidents/{inc_id}")
+    assert detail_res.status_code == 200
+    assert b"Web UI Render Test Incident" in detail_res.data
+

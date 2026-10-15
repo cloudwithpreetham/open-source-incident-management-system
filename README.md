@@ -11,10 +11,10 @@ A production-grade, open-source Incident Management Portal engineered for Site R
 
 ## 📌 Project Overview & Objectives
 
-* **Core Objective:** Build a lightweight, high-availability incident management portal to record and track production alerts, enforce MTTR (Mean Time to Resolution) visibility, assign on-call responders, and log immutable root cause analyses (RCA).
-* **Role-Based Access Control (RBAC):** Supports `Admin`, `DevOps Engineer`, `SRE`, and `Viewer` personas.
-* **Notification System:** Integrated SMTP email notifications with fallback event logging for zero downtime.
-* **Observability Integration:** Built-in Prometheus `/api/v1/metrics` exporter for scraping incident gauges.
+- **Core Objective:** Build a lightweight, high-availability incident management portal to record and track production alerts, enforce MTTR (Mean Time to Resolution) visibility, assign on-call responders, and log immutable root cause analyses (RCA).
+- **Role-Based Access Control (RBAC):** Supports `Admin`, `DevOps Engineer`, `SRE`, and `Viewer` personas.
+- **Notification System:** Integrated SMTP email notifications with fallback event logging for zero downtime.
+- **Observability Integration:** Built-in Prometheus `/api/v1/metrics` exporter for scraping incident gauges.
 
 ---
 
@@ -45,11 +45,11 @@ A production-grade, open-source Incident Management Portal engineered for Site R
    └──────────────────────────────────────────────────────────────┘
 ```
 
-* **Backend:** Python 3.11+ / Flask
-* **Database:** SQLite with foreign keys & WAL journaling
-* **Frontend:** Responsive Bootstrap 5, Bootstrap Icons, Jinja2
-* **Containerization:** Docker multi-stage build, Docker Compose
-* **Testing:** Pytest automated integration test suite
+- **Backend:** Python 3.11+ / Flask
+- **Database:** SQLite with foreign keys & WAL journaling
+- **Frontend:** Responsive Bootstrap 5, Bootstrap Icons, Jinja2
+- **Containerization:** Docker multi-stage build, Docker Compose
+- **Testing:** Pytest automated integration test suite
 
 ---
 
@@ -70,6 +70,7 @@ python seed_data.py
 # Launch the portal
 python app.py
 ```
+
 Open [http://localhost:5000](http://localhost:5000) in your browser.
 
 ---
@@ -79,28 +80,30 @@ Open [http://localhost:5000](http://localhost:5000) in your browser.
 ```bash
 docker-compose up --build -d
 ```
-* **Incident Portal:** [http://localhost:5000](http://localhost:5000)
-* **Mailpit Web UI (Email Inbox):** [http://localhost:8025](http://localhost:8025)
+
+- **Incident Portal:** [http://localhost:5000](http://localhost:5000)
+- **Mailpit Web UI (Email Inbox):** [http://localhost:8025](http://localhost:8025)
 
 ---
 
 ## 📡 REST API Specification
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/v1/health` | Service health status check |
-| `GET` | `/api/v1/incidents` | List all incidents (supports `?status=`, `?severity=`, `?service=`) |
-| `POST` | `/api/v1/incidents` | Create a new incident |
-| `GET` | `/api/v1/incidents/<id>` | Get incident details & timeline logs |
-| `POST` | `/api/v1/incidents/<id>/assign` | Assign incident to an engineer |
-| `POST` | `/api/v1/incidents/<id>/resolve` | Resolve incident with RCA notes |
-| `GET` | `/api/v1/metrics` | Prometheus metrics scrape target |
+| Method | Endpoint                         | Description                                                         |
+| ------ | -------------------------------- | ------------------------------------------------------------------- |
+| `GET`  | `/api/v1/health`                 | Service health status check                                         |
+| `GET`  | `/api/v1/incidents`              | List all incidents (supports `?status=`, `?severity=`, `?service=`) |
+| `POST` | `/api/v1/incidents`              | Create a new incident                                               |
+| `GET`  | `/api/v1/incidents/<id>`         | Get incident details & timeline logs                                |
+| `POST` | `/api/v1/incidents/<id>/assign`  | Assign incident to an engineer                                      |
+| `POST` | `/api/v1/incidents/<id>/resolve` | Resolve incident with RCA notes                                     |
+| `GET`  | `/api/v1/metrics`                | Prometheus metrics scrape target                                    |
 
 ---
 
 ## 🧪 Automated Testing
 
 Run the test suite using `pytest`:
+
 ```powershell
 pytest -v
 ```
@@ -109,8 +112,8 @@ pytest -v
 
 ## 📝 Pre-Seeded Sample Incidents
 
-1. **#1 - P1 Critical:** API Gateway 504 Gateway Timeout Spikes (`api-gateway-prod`) - *Resolved*
-2. **#2 - P2 High:** Kubernetes Ingress SSL/TLS Certificate Expiration Warning (`k8s-ingress-controller`) - *Mitigated*
-3. **#3 - P1 Critical:** Payment Microservice Pod CrashLoopBackOff (`payment-service`) - *Investigating*
-4. **#4 - P3 Medium:** High Disk Space Utilization on ElasticSearch Data Node 03 (`logging-elasticsearch`) - *Open*
-5. **#5 - P3 Medium:** Nightly Backup CronJob Failed to Upload to S3 (`postgres-backup-cron`) - *Resolved*
+1. **#1 - P1 Critical:** API Gateway 504 Gateway Timeout Spikes (`api-gateway-prod`) - _Resolved_
+2. **#2 - P2 High:** Kubernetes Ingress SSL/TLS Certificate Expiration Warning (`k8s-ingress-controller`) - _Mitigated_
+3. **#3 - P1 Critical:** Payment Microservice Pod CrashLoopBackOff (`payment-service`) - _Investigating_
+4. **#4 - P3 Medium:** High Disk Space Utilization on ElasticSearch Data Node 03 (`logging-elasticsearch`) - _Open_
+5. **#5 - P3 Medium:** Nightly Backup CronJob Failed to Upload to S3 (`postgres-backup-cron`) - _Resolved_

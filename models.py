@@ -65,6 +65,23 @@ def init_db():
     );
     """)
 
+    # Auto-seed essential team members if users table is unpopulated
+    cursor.execute("SELECT COUNT(*) FROM users")
+    if cursor.fetchone()[0] == 0:
+        default_users = [
+            ("Alice Chen", "alice.chen@ops.example.com", "Admin"),
+            ("David Miller", "david.m@ops.example.com", "DevOps Engineer"),
+            ("Siddharth Patel", "siddharth.p@ops.example.com", "SRE"),
+            ("Elena Rostova", "elena.r@ops.example.com", "DevOps Engineer"),
+            ("Security Bot", "secops-alert@internal.local", "Viewer")
+        ]
+        now_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+        for name, email, role in default_users:
+            cursor.execute(
+                "INSERT OR IGNORE INTO users (name, email, role, created_at) VALUES (?, ?, ?, ?)",
+                (name, email, role, now_str)
+            )
+
     conn.commit()
     conn.close()
 

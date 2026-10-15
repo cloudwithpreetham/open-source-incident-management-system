@@ -1,6 +1,7 @@
 # Project 8: Open-Source Incident Management System (IncidentFlow)
 
 [![Elevate Labs DevOps Internship](https://img.shields.io/badge/Elevate_Labs-DevOps_Internship-blue.svg)](https://elevatelabs.tech)
+[![CI Pipeline](https://github.com/cloudwithpreetham/open-source-incident-management-system/actions/workflows/ci.yml/badge.svg)](https://github.com/cloudwithpreetham/open-source-incident-management-system/actions)
 [![Python](https://img.shields.io/badge/Python-3.11+-green.svg)](https://python.org)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://docker.com)
 [![Status](https://img.shields.io/badge/Status-Complete-brightgreen.svg)](#)
@@ -84,6 +85,25 @@ docker-compose up --build -d
 - **Incident Portal:** [http://localhost:5000](http://localhost:5000)
 - **Mailpit Web UI (Email Inbox):** [http://localhost:8025](http://localhost:8025)
 
+Alternatively, build and run the Docker image standalone:
+```bash
+docker build -t cloudwithpreetham/incident-portal:latest .
+docker run -d -p 5000:5000 --name incident-portal cloudwithpreetham/incident-portal:latest
+```
+
+---
+
+## 📂 Project Deliverables & Reports
+
+As required by the Elevate Labs Internship curriculum:
+
+| Deliverable | Location / Resource | Description |
+| :--- | :--- | :--- |
+| **1–2 Page PDF Project Report** | [`docs/Project_8_Incident_Management_System_Report.pdf`](docs/Project_8_Incident_Management_System_Report.pdf) | Formal 2-page assessment report covering Introduction, Abstract, Tools Used, Architecture, and Conclusion |
+| **Top 50 DevOps Interview Questions** | [`docs/TOP_50_DEVOPS_INTERVIEW_QUESTIONS.md`](docs/TOP_50_DEVOPS_INTERVIEW_QUESTIONS.md) | Comprehensive answers and real-world SRE explanations for the Top 50 DevOps interview questions |
+| **CI/CD Automation Workflow** | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) | Automated GitHub Actions CI pipeline executing Ruff linting and Pytest test suites |
+| **QA Test Suite (33 Tests)** | [`tests/`](tests/) | End-to-end user journeys, negative boundary tests, RBAC checks, Prometheus compliance, and SMTP resilience |
+
 ---
 
 ## 📡 REST API Specification
@@ -102,11 +122,18 @@ docker-compose up --build -d
 
 ## 🧪 Automated Testing
 
-Run the test suite using `pytest`:
+Run the full 33-test suite using `pytest`:
 
 ```powershell
 pytest -v
 ```
+
+All 33 test cases validate:
+- **E2E Lifecycle:** Incident creation, status transitions (`Open` ➔ `Investigating` ➔ `Mitigated` ➔ `Resolved`), on-call reassignment, and immutable RCA audit trails.
+- **Negative & Boundary Scenarios:** Missing mandatory fields (400), invalid operations, and non-existent IDs (404).
+- **RBAC:** Multi-persona cookie propagation (`Admin`, `SRE`, `DevOps Engineer`, `Viewer`).
+- **Observability:** Prometheus scrape exposition format and ISO 8601 UTC timestamp healthchecks.
+- **Notification Reliability:** Zero-downtime mock fallback when SMTP server is unreachable.
 
 ---
 

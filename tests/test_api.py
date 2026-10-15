@@ -4,7 +4,13 @@ import sys
 import json
 import tempfile
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+proj_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if proj_dir not in sys.path:
+    sys.path.insert(0, proj_dir)
+
+# Ensure fresh imports for Project 8
+for mod_name in ['models', 'notifications', 'app', 'seed_data']:
+    sys.modules.pop(mod_name, None)
 
 os.environ["INCIDENT_DB_PATH"] = "test_incidents.db"
 import models
